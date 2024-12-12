@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, request
+from flask import Flask, render_template, redirect, request, url_for
 import sqlite3
 
 app = Flask(__name__)
@@ -31,6 +31,24 @@ def index():
     posts = connection.execute("SELECT * FROM posts").fetchall()
     connection.close()
     return render_template("index.html", posts=posts)
+
+
+@app.get("/add/")
+def add_finance():
+    return render_template("add.html")
+
+
+@app.post("/add/")
+def add_finance_post():
+    cash = request.form["cash"]
+    content = request.form["content"]
+    connection = session()
+    connection.execute("INSERT INTO posts (title, content) VALUES (?, ?)", (title, content))
+    connection.commit()
+    connection.close()
+    return redirect(url_for("index"))
+
+
 
 if __name__ == "__main__":
     init_db()
