@@ -8,7 +8,7 @@ DATABASE = "database.db"
 
 
 def session():
-    connection = sqlite3.connect(DATABASE)
+    connection = sqlite3.connect("database.db")
     connection.row_factory = sqlite3.Row
     return connection
 
