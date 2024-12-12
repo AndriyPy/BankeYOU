@@ -43,12 +43,39 @@ def add_finance_post():
     cash = request.form["cash"]
     content = request.form["content"]
     connection = session()
-    connection.execute("INSERT INTO posts (title, content) VALUES (?, ?)", (title, content))
+    connection.execute("INSERT INTO posts (title, content) VALUES (?, ?)", (cash, content))
     connection.commit()
     connection.close()
     return redirect(url_for("index"))
 
 
+
+@app.get("/<int:post_id>/edit")
+def get_edit(post_id):
+    connection = session()
+    post = connection.execute("SELECT * FROM posts WHERE id=?", (post_id,)).fetchone()
+    connection.close()
+    return render_template("edit.html", post=post)
+
+
+@app.post("/<int:post_id>/edit")
+def post_edit(post_id):
+    connection = session()
+    cash = request.form["cash"]
+    content = request.form["content"]
+    connection.execute("UPDATE posts SET title = ?, content = ? WHERE id = ?", (cash, content, post_id))
+    connection.commit()
+    connection.close()
+    return redirect(url_for("index"))
+
+
+@app.post("/delete")
+def delete(post_id):
+    connection = session()
+    connection.execute("DELETE FROM posts WHERE id = ?", (post_id,))
+    connection.commit()
+    connection.close()
+    return redirect(url_for("index"))
 
 if __name__ == "__main__":
     init_db()
