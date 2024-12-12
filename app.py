@@ -30,6 +30,8 @@ def index():
     connection = session()
     posts = connection.execute("SELECT * FROM posts").fetchall()
     connection.close()
+
+
     return render_template("index.html", posts=posts)
 
 
